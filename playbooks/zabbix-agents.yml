@@ -1,0 +1,5 @@
+---
+- hosts: zabbix-agents
+  roles:
+    - { role: netfive.zabbix-agent }
+

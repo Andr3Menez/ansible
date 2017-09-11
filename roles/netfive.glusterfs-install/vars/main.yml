@@ -1,0 +1,8 @@
+---
+gluster_brick_dir: '/mnt/glusterfsDockerRFS'
+gluster_node1: swarm02.soul.com.br
+gluster_node2: swarm03.soul.com.br
+gluster_node3: swarm01.soul.com.br
+gluster_volume: DockerRFS
+gluster_replicas: replica 3
+gluster_transport: transport tcp

@@ -1,0 +1,29 @@
+---
+- hosts: webservers
+  remote_user: root
+  tasks:
+    - name: "Instalando dependencias para o Docker"
+      yum: name={{ item}} state=present
+      with_items:
+        - yum-utils
+        - device-mapper-persistent-data
+        - lvm2
+
+    - name: "Download e instalação da versão mais recente do Docker"
+      shell: curl -fsSL https://get.docker.com/ | sh
+
+    - name: "Download e instalação do Docker compose"
+      shell: curl -L https://github.com/docker/compose/releases/download/1.14.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+
+    - name: "Instalação do plugin local-persist"
+      shell: curl -fsSL https://raw.githubusercontent.com/CWSpear/local-persist/master/scripts/install.sh | sudo bash
+
+    - name: "Ajustando as permissões do docker-compose, adicionando permissão de execução"
+      file: dest=/usr/local/bin/docker-compose mode=u=rwx,g=rx,o=rx
+
+    - name: "Iniciando o serviço e habilitando a inicialização automática"
+      service:
+        name: docker
+        state: started
+        enabled: yes
+    

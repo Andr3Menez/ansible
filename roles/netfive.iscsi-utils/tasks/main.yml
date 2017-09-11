@@ -1,0 +1,17 @@
+---
+- name: Ensure that the iscsi utils package is installed
+  tags: iscsi
+  yum:
+    name: iscsi-initiator-utils
+    state: present
+    update_cache: yes
+  register: iscsi_yum
+
+- name: Enable and start the iscsi utils service
+  service:
+    enabled: yes
+    name: iscsid
+    state: started
+  tags: iscsi
+  when: iscsi_yum|success
+...

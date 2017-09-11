@@ -1,0 +1,64 @@
+---
+# tasks file for ansible-zabbix-server
+
+- name: deploy Glusterfs 3.10 repo on /etc/yum.repos.d/Gluster.repo
+  template: src=Gluster.repo.j2 dest=/etc/yum.repos.d/Gluster.repo
+  become: yes
+
+- name: install glusterfs
+  yum: name=glusterfs state=present
+  become: yes
+
+- name: install glusterfs-fuse
+  yum: name=glusterfs-fuse state=present
+  become: yes
+
+- name: install glusterfs-server
+  yum: name=glusterfs-server state=present
+  become: yes
+
+- name: start and enable glusterfs
+  service: name=glusterd state=started enabled=yes
+  become: yes
+
+#- name: start and enable glusterfs-client
+#  service: name=glusterfs-client state=started enabled=yes
+#  become: yes
+
+#- name: create brick directories on nodes
+#  file: path={{gluster_brick_dir}} state=directory #/mnt/glusterfsDockerRFS state=directory #{{gluster_brick_dir}} state=directory
+#  tags:
+#    - gluster
+
+#- name: configure peers on host1 only 
+#  shell: gluster peer probe {{gluster_node1}} && gluster peer probe {{gluster_node2}}
+#  with_items: groups.dockerhosts
+#  when: inventory_hostname == groups.dockerhosts[0]
+#  tags:
+#    - gluster
+
+#- name: create default volume for Docker replicated FS
+#  shell: gluster volume create 
+#        {{gluster_volume}}
+#        {{gluster_replicas}}
+#        {{gluster_transport}}
+#        {{gluster_node1}}:/{{gluster_volume}}
+#        {{gluster_node2}}:/{{gluster_volume}}
+#        {{gluster_node3}}:/{{gluster_volume}} force
+#  when: inventory_hostname == groups.dockerhosts[0]
+#  tags:
+#    - gluster
+
+#- name: starting Docker replicated FS volume
+#  shell: gluster volume start {{gluster_volume}}
+#  with_items: groups.dockerhosts
+#  when: inventory_hostname == groups.dockerhosts[0]
+#  tags:
+#    - gluster
+
+#- name: mount Docker replicated FS volume on node1
+# path: /docker
+#  src: swarm03.soul.com.br:/glusterDockerRFS
+#  fstype: glusterfs
+#  opts: defaults,_netdev 0 0
+#  when: inventory_hostname == groups.dockerhosts[0]

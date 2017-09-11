@@ -1,0 +1,7 @@
+---
+- name: restart iscsi
+  tags: iscsi
+  service:
+    name: iscsid
+    state: restarted
+...
